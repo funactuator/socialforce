@@ -5,29 +5,55 @@ import Rightbar from "./components/Rightbar/Rightbar";
 import Navbar  from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
+import React, {useState} from "react";
+
 import {
   createBrowserRouter,
   RouterProvider,
-  Outlet
+  Outlet,
+  Navigate
 } from "react-router-dom";
 
 function App() {
 
+  const [currentUser, setCurrentUser] = useState(false);
+
+  const Layout = () => {
+    return(
+      <div>
+        <Navbar/>
+        <div>
+          <Leftbar/>
+          <Outlet/>
+          <Rightbar/>
+        </div>
+      </div>
+    )
+  }
+
+  const ProtectedRoute = ({children}) => {
+    if(!currentUser){
+      return <Navigate to="/login"/>
+    }
+    return children;
+  }
+
+
   const router = createBrowserRouter([
-    // {
-    //   path: "/",
-    //   element: <Layout/>,
-    //   children:[
-    //     {
-    //       path:"/",
-    //       element:<Home/>
-    //     },
-    //     {
-    //       path:"/profile:id",
-    //       element:<Profile/>
-    //     }
-    //   ]
-    // },
+    {
+      path:"/",
+      element: (<ProtectedRoute><Layout/></ProtectedRoute>),
+      children:[
+        {
+          path:"/",
+          element:<Home/>
+        },
+        {
+          path:"/profile:id",
+          element:<Profile/>
+        },
+      ]
+    },
     {
       path: "/login",
       element: <Login/>,
@@ -38,20 +64,6 @@ function App() {
     }
 
   ]);
-
-
-  const Layout = () => {
-    return(
-      <div>
-        <Navbar/>
-        <div>
-          <Leftbar/>
-          <Rightbar/>
-          <Outlet/>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div>
