@@ -16,7 +16,7 @@ import {
 
 function App() {
 
-  const [currentUser, setCurrentUser] = useState(false);
+  const [currentUser, setCurrentUser] = useState(true);
 
   const Layout = () => {
     return(
